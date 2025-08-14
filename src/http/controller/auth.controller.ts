@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { authService } from "../service/auth.service";
 
 class AuthController {
-    public async login (req: Request, res: Response, next: NextFunction) {
+    public async register (req: Request, res: Response, next: NextFunction) {
         try {
             const {
                 email,
