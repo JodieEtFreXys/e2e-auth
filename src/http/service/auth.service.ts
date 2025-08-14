@@ -1,21 +1,33 @@
 import prisma from "../../global/prisma";
+import bcrypt from "bcrypt";
+import {v4 as uuidv4} from "uuid"
 
 class AuthService {
-    public async login(username: string, password: string) {
-        const user = await prisma.user.create({
-            data: {
-                name: username,
-                forgot_password_token: 'abc123',
+    public async register(email: string, password: string) {
+        const isUserExist = await prisma.user.findFirst({
+            where: {
+                email,
             }
-        }); // -> Manggil Database pake Prisma
+        });
 
-        if (!user) {
-            throw new Error('User not found')
+        if (isUserExist) {
+            throw new Error('User already registered');
         }
 
-        const token = 'abc123';
+        const hashedPassword = await bcrypt.hash(password, 3);
+        const createUser = await prisma.$transaction([
+            prisma.user.create({
+                data: {
+                    id: uuidv4(),
+                    name: 'placeholder123',
+                    password: hashedPassword,
+                    email: email,
+                    forgot_password_token: '123456',
+                }
+            }),
+        ]);
 
-        return user;
+        return createUser;
     }
 }
 

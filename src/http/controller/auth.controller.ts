@@ -2,14 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import { authService } from "../service/auth.service";
 
 class AuthController {
-    public async login (req: Request, res: Response, next: NextFunction) {
+    public async register (req: Request, res: Response, next: NextFunction) {
         try {
             const {
-                
+                confirm_password,
+                password,
+                email,
             } = req.body; // <- Akses ke Request Body
 
-            if (!username) {
-                throw new Error('Username is mandatory')
+            if (password !== confirm_password) {
+                throw new Error('Password mismatch')
             }
 
             if (typeof(username) !== 'string' && username.length > 35) {
