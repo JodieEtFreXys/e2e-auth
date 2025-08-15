@@ -1,21 +1,70 @@
 import prisma from "../../global/prisma";
 
 class AuthService {
-    public async login(username: string, password: string) {
-        const user = await prisma.user.create({
-            data: {
-                name: username,
-                forgot_password_token: 'abc123',
-            }
-        }); // -> Manggil Database pake Prisma
+    private async sendEmail() {
+        console.log('Email sent!');
+    }
 
+    public async generateForgotPassword(email: string) {
+        const user = await prisma.user.findFirst({
+            where: {
+                name: email,
+            }
+        });
+
+        const resetMessage = "Your reset token has been sent"
         if (!user) {
-            throw new Error('User not found')
+            return {
+                "message": resetMessage,
+            };
         }
 
-        const token = 'abc123';
+        const resetPasswordToken = Math.random();
+        await prisma.$transaction([
+            prisma.user.update({
+                where: {
+                    id: user.id
+                },
+                data: {
+                    forgot_password_token: String(resetPasswordToken),
+                }
+            }),
+        ]);
+        
+        await this.sendEmail();
 
-        return user;
+        return {
+            "message": resetMessage,
+        };;
+    }
+
+    public async resetPassword(token: string, email: string) {
+        const user = await prisma.user.findFirst({
+            where: {
+                email,
+            }
+        });
+
+        if (!user) {
+            throw new Error('Token not provided');
+        }
+
+        if (token !== user.forgot_password_token) {
+            throw new Error('Token not provided');
+        }
+
+        await prisma.$transaction([
+            prisma.user.update({
+                where: {
+                    email
+                },
+                data: {
+                    forgot_password_token: 'not reset',
+                }
+            }),
+        ]);
+
+        return 'reset success';
     }
 }
 
