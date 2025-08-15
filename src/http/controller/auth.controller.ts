@@ -6,13 +6,14 @@ class AuthController {
         try {
             const {
                 email,
+                
             } = req.body; // <- Akses ke Request Body
-
-            if (!username) {
+            
+            if (!email) {
                 throw new Error('Username is mandatory')
             }
 
-            if (typeof(username) !== 'string' && username.length > 35) {
+            if (typeof(email) !== 'string' && email.length > 35) {
                 throw new Error('Username must be astring');
             }
 
