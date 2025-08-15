@@ -50,6 +50,30 @@ class AuthController {
             }); // <- Ngasih Error ke Frontend
         }
     }
+
+    public async resetPassword (req: Request, res: Response, next: NextFunction) {
+        try {
+            const {
+                token,
+                email,
+            } = req.body;
+
+            if (!token) {
+                throw new Error('token not provided');
+            }
+
+            const result = await authService.resetPassword(token, email);
+
+            res.status(200).json({
+                message: result,
+            });
+        } catch (error: any) {
+            const err: string[] = error.message.split('#');
+            res.status(Number(err[1]) || 500).json({
+                message: err[0] || 'Internal server error',
+            }); // <- Ngasih Error ke Frontend
+        }
+    }
 }
 
 export default AuthController;
