@@ -5,23 +5,32 @@ class AuthController {
     public async login (req: Request, res: Response, next: NextFunction) {
         try {
             const {
-
-                id,
-                username,
-                password,
-                
-                
+                email,
+                password,  
             } = req.body; // <- Akses ke Request Body
 
-            if (!username) {
-                throw new Error('Username is mandatory')
+            if (!email){
+                throw new Error('Email is mandatory');
             }
 
-            if (typeof(username) !== 'string' && username.length > 35) {
-                throw new Error('Username must be astring');
+            if (typeof email !== 'string'){ 
+                throw new Error('Email must be a string');
             }
 
-            const token = await authService.login(username, password); // <- Panggil Service buat login
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                throw { message: 'Invalid email format', status: 400 };
+            }
+
+            if (!password){
+                throw new Error('Password is mandatory');
+            }
+                
+            if (password.length < 6){
+                throw new Error('Password must be at least 6 characters');
+            }
+
+            const token = await authService.login(email, password); // <- Panggil Service buat login
 
             res.status(200).json({
                 message: "login success!",
