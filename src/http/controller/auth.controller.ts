@@ -21,11 +21,11 @@ class AuthController {
                 throw new Error('Username must be astring');
             }
 
-            const user = authService.login(username, password); // <- Panggil Service buat login
+            const token = await authService.login(username, password); // <- Panggil Service buat login
 
             res.status(200).json({
                 message: "login success!",
-                meta: user,
+                token: token,
             });
         } catch  (error: any) {
             const err: string[] = error.message.split('#');
