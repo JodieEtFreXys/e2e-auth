@@ -10,28 +10,35 @@ class AuthController {
             } = req.body; // <- Akses ke Request Body
 
             if (!email){
-                throw new Error('Email is mandatory');
+               return res.status(400).json({ message: "Email is mandatory" });
             }
 
             if (typeof email !== 'string'){ 
-                throw new Error('Email must be a string');
+                return res.status(400).json({ message: "Email must be a string" });
             }
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                throw { message: 'Invalid email format', status: 400 };
+                return res.status(400).json({ message: "Invalid email format" });
             }
 
             if (!password){
-                throw new Error('Password is mandatory');
+                return res.status(400).json({ message: "Password is mandatory" });
             }
                 
             if (password.length < 6){
-                throw new Error('Password must be at least 6 characters');
+               return res
+                 .status(400)
+                 .json({ message: "Password must be at least 6 characters" });
             }
 
             const token = await authService.login(email, password); // <- Panggil Service buat login
 
+            if (!token) {
+              return res
+                .status(401)
+                .json({ message: "Invalid email or password" });
+            }
             res.status(200).json({
                 message: "login success!",
                 token: token,
