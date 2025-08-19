@@ -5,6 +5,11 @@ class AuthController {
     public async login (req: Request, res: Response, next: NextFunction) {
         try {
             const {
+
+                id,
+                username,
+                password,
+                
                 
             } = req.body; // <- Akses ke Request Body
 
