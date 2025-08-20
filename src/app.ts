@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import express, { Express } from "express"
-import mainRouter from "./http/router/main.router"
+import mainRouter from "./http/router/auth.router"
 
 dotenv.config();
 
