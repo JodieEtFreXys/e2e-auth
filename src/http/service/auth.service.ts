@@ -5,7 +5,10 @@ import jwt from "jsonwebtoken";
 class AuthService {
   public async login(email: string, password: string) {
     const users = await prisma.user.findMany({
-      where: { email },
+      where: {
+        email: email,
+        password: password,
+      },
     });
 
     if (users.length === 0) {
