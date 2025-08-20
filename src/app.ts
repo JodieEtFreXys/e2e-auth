@@ -11,7 +11,7 @@ app.use(express.json({ limit: '2kb' }));
 app.use(express.text());
 app.use(express.urlencoded({ extended: true, limit: '2kb' }));
 
-app.use("/api/auth", authRouter);
+app.use("/api", authRouter);
 
 app.listen(3000, async () => {
     console.log("App is running in port: 3000");

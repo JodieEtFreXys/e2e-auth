@@ -8,7 +8,7 @@ class AuthController {
                 email,
                 password,  
             } = req.body; // <- Akses ke Request Body
-
+ 
             if (!email){
                return res.status(400).json({ message: "Email is mandatory" });
             }
