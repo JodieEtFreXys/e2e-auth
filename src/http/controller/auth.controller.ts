@@ -10,15 +10,33 @@ class AuthController {
                 email,
             } = req.body; // <- Akses ke Request Body
 
-            if (password !== confirm_password) {
-                throw new Error('Password mismatch')
+            //email validation
+            if (!email) {
+            throw new Error("Email is required#400");
             }
 
-            if (typeof(username) !== 'string' && username.length > 35) {
+            if (typeof(email) !== 'string' && email.length > 35) {
                 throw new Error('Username must be astring');
             }
 
-            const user = authService.login(username, password); // <- Panggil Service buat login
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+             if (!emailRegex.test(email)) {
+                throw new Error("Invalid email format#400");
+            }
+
+            //password validation
+             if (password !== confirm_password) {
+                throw new Error('Password mismatch')
+            }
+
+            if (!password) {
+                 throw new Error("Password is required#400");
+             }
+
+            if (password.length < 6) {
+                throw new Error("Password must be at least 6 characters#400");
+            }
+            const user = authService.register(email, password); // <- Panggil Service buat login
 
             res.status(200).json({
                 message: "login success!",
