@@ -39,7 +39,7 @@ class AuthController {
             const user = authService.register(email, password); // <- Panggil Service buat login
 
             res.status(200).json({
-                message: "Create an account success, please login to your accountr!",
+                message: "Create an account success, please login to your account!",
                 meta: user,
             });
         } catch  (error: any) {
