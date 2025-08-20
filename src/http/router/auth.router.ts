@@ -5,7 +5,7 @@ const router = Router();
 const controller = new AuthController();
 
 router.post(
-  "/auth/register",
+  "/register",
   (req: Request, res: Response, next: NextFunction) =>
     controller.register(req, res, next) 
 );
