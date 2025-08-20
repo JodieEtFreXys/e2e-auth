@@ -26,10 +26,10 @@ class AuthController {
                 return res.status(400).json({ message: "Password is mandatory" });
             }
                 
-            if (password.length < 6){
+            if (password.length < 8){
                return res
                  .status(400)
-                 .json({ message: "Password must be at least 6 characters" });
+                 .json({ message: "Password must be at least 8 characters" });
             }
 
             const token = await authService.login(email, password); // <- Panggil Service buat login
