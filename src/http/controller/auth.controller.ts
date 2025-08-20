@@ -21,7 +21,7 @@ class AuthController {
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
              if (!emailRegex.test(email)) {
-                throw new Error("Invalid email format#400");
+                throw new Error("must be email format");
             }
 
             //password validation
@@ -33,13 +33,13 @@ class AuthController {
                  throw new Error("Password is required#400");
              }
 
-            if (password.length < 6) {
-                throw new Error("Password must be at least 6 characters#400");
+            if (password.length < 8) {
+                throw new Error("Password must be at least 8 characters#400");
             }
             const user = authService.register(email, password); // <- Panggil Service buat login
 
             res.status(200).json({
-                message: "login success!",
+                message: "Create an account success, please login to your account!r",
                 meta: user,
             });
         } catch  (error: any) {

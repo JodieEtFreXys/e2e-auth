@@ -1,13 +1,12 @@
 import Express, { NextFunction, Request, Response }  from 'express';
+import AuthController from '../controller/auth.controller';
 
 const router = Express();
 const controller = new AuthController()
 
 router.post(
-    '/auth/login',
+    '/auth/register',
     (req: Request, res: Response, next: NextFunction) => new AuthController()
 )
 
-router.post(
-    '/auth/forgot_pass'
-)
+export default router;
