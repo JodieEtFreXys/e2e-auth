@@ -5,17 +5,13 @@ import jwt from "jsonwebtoken";
 class AuthService {
   public async login(email: string, password: string) {
     const users = await prisma.user.findMany({
-      where: {
-        email: email,
-        password: password,
-      },
+     where: { email },
     });
 
-    if (users.length === 0) {
+    const user = users[0];
+    if (!user) {
       throw { message: "Invalid credentials", status: 401 };
     }
-
-    const user = users[0]; 
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
@@ -29,11 +25,15 @@ class AuthService {
       { expiresIn: "1h" }
     );
 
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-    };
+     return {
+       message: "Login success",
+       user: {
+         id: user.id,
+         email: user.email,
+         name: user.name,
+       },
+       token,
+     };
   }
 }
 
