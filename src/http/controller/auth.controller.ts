@@ -17,20 +17,20 @@ class AuthController {
                 return res.status(400).json({ message: "Email must be a string" });
             }
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                return res.status(400).json({ message: "Invalid email format" });
-            }
+            // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            // if (!emailRegex.test(email)) {
+            //     return res.status(400).json({ message: "Invalid email format" });
+            // }
 
             if (!password){
                 return res.status(400).json({ message: "Password is mandatory" });
             }
                 
-            if (password.length < 8){
-               return res
-                 .status(400)
-                 .json({ message: "Password must be at least 8 characters" });
-            }
+            // if (password.length < 8){
+            //    return res
+            //      .status(400)
+            //      .json({ message: "Password must be at least 8 characters" });
+            // }
 
             const token = await authService.login(email, password); // <- Panggil Service buat login
 
@@ -85,8 +85,8 @@ class AuthController {
             if (password.length < 8) {
                 throw new Error("Password must be at least 8 characters#400");
             }
-            const user = authService.register(email, password); // <- Panggil Service buat login
-
+            const user = await authService.register(email, password); // <- Panggil Service buat login
+            
             res.status(200).json({
                 message: "Create an account success, please login to your account!",
                 meta: user,
@@ -133,6 +133,10 @@ class AuthController {
                 token,
                 email,
             } = req.body;
+
+            if (!email) {
+                throw new Error('Email not exist');
+            }
 
             if (!token) {
                 throw new Error('token not provided');

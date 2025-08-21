@@ -1,7 +1,7 @@
 import prisma from "../../global/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid"; 
 
 class AuthService {
   public async login(email: string, password: string) {
@@ -10,16 +10,17 @@ class AuthService {
     });
 
     const user = users[0];
-
+    console.log(users);
+    console.log(user);
     if (!user) {
       throw { message: "Invalid credentials", status: 401 };
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw { message: "Invalid credentials", status: 401 };
+      throw { message: "Invalid credentials sdf", status: 401 };
     }
-
+ 
    
     const token = jwt.sign(
       { id: user.id, email: user.email },
@@ -38,13 +39,13 @@ class AuthService {
      };
   }
 
-  public async register(password: string, email: string,) {
+  public async register(email: string, password: string,) {
         const isUserExist = await prisma.user.findUnique({
       where: {
         email,
       },
     })
-       
+       console.log(isUserExist);
     if (isUserExist) {
       throw new Error('email already exist');
     }
@@ -99,7 +100,7 @@ class AuthService {
 
         return {
             "message": resetMessage,
-        };;
+        };
     }
 
     public async resetPassword(token: string, email: string) {
@@ -112,7 +113,8 @@ class AuthService {
         if (!user) {
             throw new Error('Token not provided');
         }
-
+        console.log(token);
+        console.log(user);
         if (token !== user.forgot_password_token) {
             throw new Error('Token not provided');
         }
@@ -120,7 +122,7 @@ class AuthService {
         await prisma.$transaction([
             prisma.user.update({
                 where: {
-                    email
+                    id: user.id,
                 },
                 data: {
                     forgot_password_token: 'not reset',
