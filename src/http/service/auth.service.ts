@@ -100,6 +100,7 @@ class AuthService {
 
         return {
             "message": resetMessage,
+            "token": user.forgot_password_token,
         };
     }
 
