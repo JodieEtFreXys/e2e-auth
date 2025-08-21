@@ -11,7 +11,7 @@ app.use(express.json({ limit: '2kb' }));
 app.use(express.text());
 app.use(express.urlencoded({ extended: true, limit: '2kb' }));
 
-app.use("/api", authRouter);
+app.use('/api', authRouter);
 
 app.listen(8001, async () => {
     console.log("App is running in port: 8001");
