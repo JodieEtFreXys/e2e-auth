@@ -9,6 +9,7 @@ class AuthService {
     });
 
     const user = users[0];
+
     if (!user) {
       throw { message: "Invalid credentials", status: 401 };
     }
